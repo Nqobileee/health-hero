@@ -190,7 +190,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       activeEffect: actualEffect,
       effectExpiry: Date.now() + actualDuration,
       activeFact: fact,
-      factExpiry: Date.now() + 2000,
+      factExpiry: Date.now() + 3500, // longer so kids can read the alcohol fact
       cleanRunDistance: 0,
       comboGroup: null,
       comboCount: 0,

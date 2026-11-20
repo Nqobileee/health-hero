@@ -30,7 +30,7 @@ export default function App() {
     <div className="relative w-full h-screen bg-amber-50 overflow-hidden" style={{ fontFamily: "'Nunito', 'Quicksand', sans-serif" }}>
       <Game />
 
-      {/* Visual effect overlays from junk food */}
+      {/* Visual effect overlays from alcohol (blurry vision, dizziness, slow reactions, confusion) */}
       {status === 'playing' && activeEffect === 'blur' && (
         <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: 'blur(3px)', border: '8px solid rgba(239, 83, 80, 0.3)', borderRadius: '0' }} />
       )}
@@ -88,6 +88,9 @@ export default function App() {
                 }}
               >
                 {activeFact.isHealthy ? `+ ${activeFact.item}` : `- ${activeFact.item}`}
+                {!activeFact.isHealthy && (
+                  <div className="font-semibold mt-0.5 max-w-[220px]" style={{ color: '#8D6E63' }}>{activeFact.fact}</div>
+                )}
               </div>
             </div>
           )}
@@ -109,7 +112,7 @@ export default function App() {
           <div className="rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl border" style={{ background: '#FFF8E1', borderColor: '#FFD54F' }}>
             <h1 className="text-4xl font-black mb-1 uppercase tracking-tight" style={{ color: '#4CAF50' }}>Health Hero</h1>
             <p className="text-lg font-bold mb-1" style={{ color: '#FF9800' }}>The Healthy Runner</p>
-            <p className="mb-6 font-medium text-sm" style={{ color: '#8D6E63' }}>Collect healthy food, dodge junk food, and learn about nutrition!</p>
+            <p className="mb-6 font-medium text-sm" style={{ color: '#8D6E63' }}>Collect healthy food, dodge alcohol, and grow up strong! Alcohol is not for kids.</p>
 
             <div className="space-y-3 mb-6 text-left rounded-2xl p-4 border" style={{ background: 'white', borderColor: '#C8E6C9' }}>
               <div className="flex items-center gap-3" style={{ color: '#4CAF50' }}>
@@ -155,7 +158,7 @@ export default function App() {
           <div className="rounded-3xl p-6 max-w-md w-full text-center shadow-2xl border" style={{ background: '#FFF8E1', borderColor: '#FFD54F' }}>
             <h2 className="text-3xl font-black mb-1 uppercase tracking-tight" style={{ color: '#FF9800' }}>Run Summary</h2>
             <p className="mb-4 font-medium text-sm" style={{ color: '#8D6E63' }}>
-              {healthMeter <= 0 ? 'Your health ran out! Eat more healthy food next time!' : 'You bumped into a wall! Try to dodge next time!'}
+              {healthMeter <= 0 ? 'Your health ran out! Dodge the alcohol and grab healthy food next time!' : 'You bumped into a wall! Try to dodge next time!'}
             </p>
 
             {/* Score row */}
@@ -213,13 +216,17 @@ export default function App() {
               </div>
             </div>
 
-            {/* Junk contacts */}
+            {/* Alcohol contacts */}
             <div className="flex justify-center gap-4 mb-4 text-sm">
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded-full" style={{ background: '#EF5350' }} />
-                <span className="font-bold" style={{ color: '#8D6E63' }}>Junk Food Hits: {junkContacts}</span>
+                <span className="font-bold" style={{ color: '#8D6E63' }}>Alcohol Hits: {junkContacts}</span>
               </div>
             </div>
+
+            <p className="mb-4 text-xs font-bold rounded-xl px-3 py-2" style={{ background: '#E8F5E9', color: '#2E7D32' }}>
+              Hero tip: If someone offers you alcohol, say "No thanks!" and talk to an adult you trust.
+            </p>
 
             <button
               onClick={startGame}

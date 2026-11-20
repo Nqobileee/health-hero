@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from './store';
-import { JunkItemDef, getRandomJunkItem } from './foodData';
+import { AlcoholItemDef, AlcoholShape, getRandomAlcoholItem } from './foodData';
 import * as THREE from 'three';
 
 const LANE_WIDTH = 2.5;
@@ -12,7 +12,80 @@ interface ObstacleData {
   lane: number;
   z: number;
   type: 'barrier' | 'overhead' | 'train';
-  junk: JunkItemDef;
+  junk: AlcoholItemDef;
+}
+
+// Small 3D model of the drink so each obstacle reads as alcohol, not a plain block
+function DrinkModel({ shape, color, scale = 1 }: { shape: AlcoholShape; color: string; scale?: number }) {
+  const body = <meshStandardMaterial color={color} roughness={0.25} metalness={0.1} transparent opacity={0.9} />;
+  const label = <meshStandardMaterial color="#FFF8E1" roughness={0.6} />;
+  if (shape === 'bottle') {
+    return (
+      <group scale={scale}>
+        <mesh castShadow position={[0, 0.3, 0]}>
+          <cylinderGeometry args={[0.2, 0.2, 0.6, 16]} />
+          {body}
+        </mesh>
+        <mesh position={[0, 0.3, 0]}>
+          <cylinderGeometry args={[0.205, 0.205, 0.22, 16]} />
+          {label}
+        </mesh>
+        <mesh position={[0, 0.68, 0]}>
+          <cylinderGeometry args={[0.07, 0.2, 0.18, 16]} />
+          {body}
+        </mesh>
+        <mesh position={[0, 0.88, 0]}>
+          <cylinderGeometry args={[0.07, 0.07, 0.24, 12]} />
+          {body}
+        </mesh>
+      </group>
+    );
+  }
+  if (shape === 'can') {
+    return (
+      <group scale={scale}>
+        <mesh castShadow position={[0, 0.25, 0]}>
+          <cylinderGeometry args={[0.18, 0.18, 0.5, 16]} />
+          <meshStandardMaterial color={color} roughness={0.3} metalness={0.6} />
+        </mesh>
+        <mesh position={[0, 0.51, 0]}>
+          <cylinderGeometry args={[0.15, 0.18, 0.03, 16]} />
+          <meshStandardMaterial color="#B0BEC5" metalness={0.8} roughness={0.3} />
+        </mesh>
+      </group>
+    );
+  }
+  if (shape === 'glass') {
+    return (
+      <group scale={scale}>
+        <mesh position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.16, 0.16, 0.04, 16]} />
+          <meshStandardMaterial color="#ECEFF1" transparent opacity={0.7} />
+        </mesh>
+        <mesh position={[0, 0.2, 0]}>
+          <cylinderGeometry args={[0.03, 0.03, 0.32, 8]} />
+          <meshStandardMaterial color="#ECEFF1" transparent opacity={0.7} />
+        </mesh>
+        <mesh castShadow position={[0, 0.5, 0]}>
+          <cylinderGeometry args={[0.24, 0.06, 0.3, 16]} />
+          {body}
+        </mesh>
+      </group>
+    );
+  }
+  // cup
+  return (
+    <group scale={scale}>
+      <mesh castShadow position={[0, 0.25, 0]}>
+        <cylinderGeometry args={[0.24, 0.17, 0.5, 16]} />
+        <meshStandardMaterial color={color} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, 0.49, 0]}>
+        <cylinderGeometry args={[0.245, 0.245, 0.03, 16]} />
+        <meshStandardMaterial color="#FFFFFF" roughness={0.5} />
+      </mesh>
+    </group>
+  );
 }
 
 export function Obstacles() {
@@ -66,7 +139,7 @@ export function Obstacles() {
               endGame();
               return prev;
             }
-            // For smaller junk food obstacles, apply penalty effects
+            // For alcohol obstacles, apply impairment effects
             hitJunkFood(
               obs.junk.penalty,
               obs.junk.effect,
@@ -105,7 +178,7 @@ export function Obstacles() {
             lane,
             z: SPAWN_Z - (Math.random() * 5),
             type,
-            junk: getRandomJunkItem(),
+            junk: getRandomAlcoholItem(),
           });
         }
       }
@@ -130,10 +203,9 @@ export function Obstacles() {
                 <boxGeometry args={[1.8, 1, 1]} />
                 {junkMat}
               </mesh>
-              <mesh position={[0, 0.65, 0]}>
-                <coneGeometry args={[0.2, 0.3, 8]} />
-                {warnMat}
-              </mesh>
+              <group position={[0, 0.5, 0]}>
+                <DrinkModel shape={obs.junk.shape} color={junkColor} scale={1.1} />
+              </group>
               <mesh position={[-0.5, 0.65, 0]}>
                 <coneGeometry args={[0.15, 0.25, 8]} />
                 {warnMat}
@@ -155,6 +227,9 @@ export function Obstacles() {
                 <coneGeometry args={[0.25, 0.3, 8]} />
                 {warnMat}
               </mesh>
+              <group position={[0, -0.35, 0.55]}>
+                <DrinkModel shape={obs.junk.shape} color={junkColor} scale={0.9} />
+              </group>
             </group>
           );
         } else {

@@ -56,8 +56,15 @@ export const HEALTHY_ITEMS: HealthyItemDef[] = [
   { id: 'HC-030', name: 'Yoghurt Cup', foodGroup: 'dairy', points: 10, color: '#F8BBD0', glowColor: '#F48FB1', shape: 'cylinder', fact: 'Yoghurt has friendly bacteria called probiotics that keep your tummy happy!' },
 ];
 
-// ── Junk food items ──
-export interface JunkItemDef {
+// ── Alcohol obstacles (teaching kids not to drink underage) ──
+// Effects mirror what alcohol really does to the body:
+//   blur   → blurry vision
+//   tilt   → dizziness / poor balance
+//   slow   → slower reactions
+//   invert → confused thinking and bad decisions
+export type AlcoholShape = 'bottle' | 'can' | 'glass' | 'cup';
+
+export interface AlcoholItemDef {
   id: string;
   name: string;
   category: string;
@@ -65,35 +72,30 @@ export interface JunkItemDef {
   effect: 'blur' | 'slow' | 'tilt' | 'invert';
   effectDuration: number; // ms
   color: string;
-  shape: 'box' | 'cylinder' | 'sphere';
+  shape: AlcoholShape;
   fact: string;
 }
 
-export const JUNK_ITEMS: JunkItemDef[] = [
-  // Sugary Drinks
-  { id: 'JF-001', name: 'Cola Can', category: 'Sugary Drinks', penalty: 10, effect: 'blur', effectDuration: 4000, color: '#B71C1C', shape: 'cylinder', fact: 'Soda has up to 10 teaspoons of sugar - that is more than your whole day!' },
-  { id: 'JF-002', name: 'Energy Drink', category: 'Sugary Drinks', penalty: 12, effect: 'blur', effectDuration: 4000, color: '#1B5E20', shape: 'cylinder', fact: 'Energy drinks have too much caffeine and sugar - water is better!' },
-  { id: 'JF-003', name: 'Milkshake', category: 'Sugary Drinks', penalty: 10, effect: 'blur', effectDuration: 4000, color: '#F48FB1', shape: 'cylinder', fact: 'Milkshakes can have as much sugar as 5 chocolate bars!' },
+export const ALCOHOL_ITEMS: AlcoholItemDef[] = [
+  // Beer & Cider — blurry vision
+  { id: 'AL-001', name: 'Beer Bottle', category: 'Beer & Cider', penalty: 10, effect: 'blur', effectDuration: 4000, color: '#A0522D', shape: 'bottle', fact: 'Alcohol makes your eyes blurry. A clear head helps you see your goals!' },
+  { id: 'AL-002', name: 'Beer Can', category: 'Beer & Cider', penalty: 10, effect: 'blur', effectDuration: 4000, color: '#D4A017', shape: 'can', fact: 'Your brain keeps growing until about age 25. Skipping alcohol helps it grow strong!' },
+  { id: 'AL-003', name: 'Cider', category: 'Beer & Cider', penalty: 10, effect: 'blur', effectDuration: 4000, color: '#C5E1A5', shape: 'bottle', fact: 'Cider can taste like apple juice, but it has alcohol in it. Always check the label!' },
 
-  // Candy & Sweets
-  { id: 'JF-004', name: 'Lollipop', category: 'Candy & Sweets', penalty: 8, effect: 'tilt', effectDuration: 5000, color: '#E91E63', shape: 'sphere', fact: 'Lollipops are pure sugar and can cause cavities in your teeth!' },
-  { id: 'JF-005', name: 'Gummy Bears', category: 'Candy & Sweets', penalty: 8, effect: 'tilt', effectDuration: 5000, color: '#FF5722', shape: 'sphere', fact: 'Gummy bears are mostly sugar with artificial colours - not real fruit!' },
-  { id: 'JF-006', name: 'Chocolate Bar', category: 'Candy & Sweets', penalty: 9, effect: 'tilt', effectDuration: 5000, color: '#4E342E', shape: 'box', fact: 'Chocolate bars have lots of added sugar - a banana is sweeter and healthier!' },
-  { id: 'JF-007', name: 'Cotton Candy', category: 'Candy & Sweets', penalty: 8, effect: 'tilt', effectDuration: 5000, color: '#CE93D8', shape: 'sphere', fact: 'Cotton candy is 100% sugar with zero nutrition!' },
+  // Wine — dizziness
+  { id: 'AL-004', name: 'Wine Bottle', category: 'Wine', penalty: 12, effect: 'tilt', effectDuration: 5000, color: '#6A1B4D', shape: 'bottle', fact: 'Alcohol messes with your balance. Staying alcohol-free keeps you steady on your feet!' },
+  { id: 'AL-005', name: 'Wine Glass', category: 'Wine', penalty: 11, effect: 'tilt', effectDuration: 5000, color: '#8E244D', shape: 'glass', fact: 'Alcohol can make you feel dizzy and sick. Water keeps you feeling great!' },
 
-  // Fried Foods
-  { id: 'JF-008', name: 'French Fries', category: 'Fried Foods', penalty: 12, effect: 'slow', effectDuration: 6000, color: '#FFB300', shape: 'box', fact: 'French fries are deep fried in oil - baked potato wedges are healthier!' },
-  { id: 'JF-009', name: 'Fried Chicken', category: 'Fried Foods', penalty: 12, effect: 'slow', effectDuration: 6000, color: '#D84315', shape: 'box', fact: 'Fried chicken absorbs lots of oil - grilled chicken is much healthier!' },
-  { id: 'JF-010', name: 'Doughnut', category: 'Fried Foods', penalty: 11, effect: 'slow', effectDuration: 6000, color: '#F48FB1', shape: 'cylinder', fact: 'Doughnuts are fried and covered in sugar - a double unhealthy combo!' },
+  // Spirits — slow reactions
+  { id: 'AL-006', name: 'Whisky Bottle', category: 'Spirits', penalty: 14, effect: 'slow', effectDuration: 6000, color: '#B5651D', shape: 'bottle', fact: 'Alcohol slows down your reactions. Top athletes stay sharp by saying no!' },
+  { id: 'AL-007', name: 'Vodka Bottle', category: 'Spirits', penalty: 14, effect: 'slow', effectDuration: 6000, color: '#B0BEC5', shape: 'bottle', fact: 'Strong drinks like vodka can hurt your liver, the organ that cleans your blood!' },
+  { id: 'AL-008', name: 'Shot Glass', category: 'Spirits', penalty: 13, effect: 'slow', effectDuration: 6000, color: '#FFE0B2', shape: 'glass', fact: 'Even a small amount of alcohol is too much for a growing body.' },
 
-  // Processed Snacks
-  { id: 'JF-011', name: 'Potato Chips', category: 'Processed Snacks', penalty: 9, effect: 'tilt', effectDuration: 4000, color: '#FDD835', shape: 'box', fact: 'Chips have lots of salt which can make your heart work too hard!' },
-  { id: 'JF-012', name: 'Cheese Puffs', category: 'Processed Snacks', penalty: 9, effect: 'tilt', effectDuration: 4000, color: '#FF8F00', shape: 'sphere', fact: 'Cheese puffs are mostly air, starch, and artificial flavour - not real cheese!' },
-  { id: 'JF-013', name: 'Instant Noodles', category: 'Processed Snacks', penalty: 9, effect: 'tilt', effectDuration: 4000, color: '#FFE082', shape: 'box', fact: 'Instant noodles are very high in salt - real pasta is much healthier!' },
-
-  // Excessive Sugar
-  { id: 'JF-014', name: 'Cake Slice', category: 'Excessive Sugar', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#EC407A', shape: 'box', fact: 'A slice of cake can have 30 grams of sugar! That is a LOT!' },
-  { id: 'JF-015', name: 'Ice Cream Sundae', category: 'Excessive Sugar', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#F8BBD0', shape: 'sphere', fact: 'Too much sugar can make you feel tired and grumpy after a short energy burst!' },
+  // Party drinks — confused thinking
+  { id: 'AL-009', name: 'Alcopop', category: 'Party Drinks', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#EC407A', shape: 'bottle', fact: 'Some alcohol drinks look like soda or juice. If it has alcohol, say "No thanks!"' },
+  { id: 'AL-010', name: 'Cocktail', category: 'Party Drinks', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#FF7043', shape: 'glass', fact: 'Alcohol confuses your thinking and makes it hard to make good choices.' },
+  { id: 'AL-011', name: 'Party Cup', category: 'Party Drinks', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#E53935', shape: 'cup', fact: 'If someone offers you alcohol, it is okay to say no. Real friends respect that!' },
+  { id: 'AL-012', name: 'Mystery Drink', category: 'Party Drinks', penalty: 15, effect: 'invert', effectDuration: 3000, color: '#7E57C2', shape: 'cup', fact: 'The law says alcohol is only for adults, because it can harm growing bodies and brains.' },
 ];
 
 // Food group color map per SRS
@@ -119,6 +121,6 @@ export function getRandomHealthyItem(): HealthyItemDef {
   return HEALTHY_ITEMS[Math.floor(Math.random() * HEALTHY_ITEMS.length)];
 }
 
-export function getRandomJunkItem(): JunkItemDef {
-  return JUNK_ITEMS[Math.floor(Math.random() * JUNK_ITEMS.length)];
+export function getRandomAlcoholItem(): AlcoholItemDef {
+  return ALCOHOL_ITEMS[Math.floor(Math.random() * ALCOHOL_ITEMS.length)];
 }
